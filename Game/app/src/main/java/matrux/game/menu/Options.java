@@ -1,5 +1,6 @@
 package matrux.game.menu;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ public class Options extends AppCompatActivity {
         btn_retour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Options.this, Menu.class));
+                finish();
             }
         });
     }

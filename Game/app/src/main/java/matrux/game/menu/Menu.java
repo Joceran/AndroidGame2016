@@ -1,6 +1,7 @@
 package matrux.game.menu;
 
 import matrux.game.R;
+import matrux.game.jeu.Jeu;
 import matrux.game.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -21,11 +22,19 @@ public class Menu extends Activity {
 
         setContentView(R.layout.activity_menu);
 
+        Button jouer = (Button) findViewById(R.id.button_jouer);
+        jouer.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                startActivity(new Intent(Menu.this, Jeu.class));
+            }
+         });
+
+
         Button options = (Button) findViewById(R.id.button_options);
         options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Menu.this, Menu.class));
+                startActivity(new Intent(Menu.this, Options.class));
             }
         });
 
