@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Game</string>
-
+    
     <string name="button_jouer">Jouer</string>
     <string name="button_options">Options</string>
-    <string name="button_credits">CrÃ©dits</string>
+    <string name="button_credits">Crédits</string>
     <string name="button_quitter">Quitter</string>
     <string name="app_name">AndroidGame</string>
     <string name="title_activity_world_controller">WorldController</string>
