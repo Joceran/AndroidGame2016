@@ -3,7 +3,8 @@
     
     <string name="button_jouer">Jouer</string>
     <string name="button_options">Options</string>
-    <string name="button_credits">Cr�dits</string>
+    <string name="button_credits">Crédits</string>
     <string name="button_quitter">Quitter</string>
     <string name="title_activity_world_controller">WorldController</string>
+    <string name="visage_detect">Visage(s) detecté(s) :)</string>
 </resources>

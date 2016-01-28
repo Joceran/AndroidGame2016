@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import matrux.game.R;
 
+
 public class WorldActivity extends Activity implements SensorEventListener, Camera.FaceDetectionListener {
 
     /*
@@ -30,7 +31,7 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
     private Camera.FaceDetectionListener camList = null;
     private boolean inPreview=false;
     private boolean cameraConfigured=false;
-    private TextView TextDectect;
+    private TextView textDetect;
 
 
     /*
@@ -63,7 +64,7 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
         FACEDETECTOR
          */
         setContentView(R.layout.content_main);
-        TextDectect = (TextView) findViewById(R.id.visage_detect);
+        textDetect = (TextView) findViewById(R.id.visage_detect);
         camList = new Camera.FaceDetectionListener() {
 
             private Rect[] TabRecFace = new Rect[100];
@@ -87,7 +88,8 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
         super.onResume();
 
         camera = Camera.open();
-        camera.setFaceDetectionListener(camList);
+        camera.setFaceDetectionListener(this);
+        //camera.startFaceDetection();
         startPreview();
 
     }
@@ -222,7 +224,16 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
 
     @Override
     public void onFaceDetection(Camera.Face[] faces, Camera camera) {
+        int i=0;
 
+        if(faces.length == 0){
+            textDetect.setText(null);
+        }
+        else
+        {
+            textDetect.setText(R.string.visage_detect);
+        }
+        //Log.i("dtct","Visage detécté !");
     }
 }
 
