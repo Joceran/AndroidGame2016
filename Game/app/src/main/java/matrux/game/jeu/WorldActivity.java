@@ -181,7 +181,7 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        return 1;
+        return metrics.heightPixels;
     }
 
     public void genererRandomEnnemi(int nb_ennemi) {
