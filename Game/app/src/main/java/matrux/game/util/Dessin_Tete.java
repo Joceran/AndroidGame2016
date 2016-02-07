@@ -7,13 +7,15 @@ import android.graphics.Paint;
 import android.hardware.Camera;
 import android.view.View;
 
+import java.util.Vector;
+
 /**
  * Created by Joceran on 01/02/2016.
  */
 public class Dessin_Tete extends View {
 
     boolean haveFace;
-    Camera.Face[] faces;
+    Vector faces;
     Paint drawingPaint;
 
     public Dessin_Tete(Context context) {
@@ -30,7 +32,7 @@ public class Dessin_Tete extends View {
         invalidate();
     }
 
-    public void setFaces(Camera.Face[] faces)
+    public void setFaces(Vector faces)
     {
         this.faces=faces;
         invalidate();
@@ -43,13 +45,13 @@ public class Dessin_Tete extends View {
         if(haveFace){
             int vWidth = getWidth();
             int vHeight = getHeight();
+            for(int i=0; i<faces.size(); i++){
+                Camera.Face face = (Camera.Face) faces.get(i);
 
-            for(int i=0; i<faces.length; i++){
-
-                int l = faces[i].rect.left;
-                int t = faces[i].rect.top;
-                int r = faces[i].rect.right;
-                int b = faces[i].rect.bottom;
+                int l = face.rect.left;
+                int t = face.rect.top;
+                int r = face.rect.right;
+                int b = face.rect.bottom;
                 int left = (l+1000) * vWidth/2000;
                 int top  = (t+1000) * vHeight/2000;
                 int right = (r+1000) * vWidth/2000;

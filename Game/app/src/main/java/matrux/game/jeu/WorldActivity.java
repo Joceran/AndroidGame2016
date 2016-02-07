@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Random;
+import java.util.Vector;
 
 import matrux.game.R;
 import matrux.game.util.Dessin_Tete;
@@ -38,7 +39,7 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
     private TextView textDetect;
     private Dessin_Tete dessinTete;
     private Random isEnnemi;
-    private Camera.Face[] tetesEnnemies;
+    private Vector tetesEnnemies;
 
     /*
     BOUSSOLE
@@ -221,15 +222,15 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
     public void onSensorChanged(SensorEvent event) {
         float[] accValue;
         float[] magnValue;
-        mSensorManager.getRotationMatrix(r, g, event.values, event.values);
+        SensorManager.getRotationMatrix(r, g, event.values, event.values);
         if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
             accValue = event.values;
         }
         if(event.sensor.getType()==Sensor.TYPE_MAGNETIC_FIELD){
             magnValue = event.values;
         }
-        mSensorManager.getRotationMatrix(r, g, event.values, event.values);
-        mSensorManager.getOrientation(r,resultat);
+        SensorManager.getRotationMatrix(r, g, event.values, event.values);
+        SensorManager.getOrientation(r, resultat);
 
     }
 
@@ -239,35 +240,36 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
     }
 
     @Override
-
-    /*public void onFaceDetection(Camera.Face[] faces, Camera camera) {
-
+//Aléatoire fonctionnel, prochaine étape c'est d'arrêter le refresh constant
+    public void onFaceDetection(Camera.Face[] faces, Camera camera) {
+        tetesEnnemies = new Vector();
+        int j = 0;
         for(int i=0;i<faces.length;i++){
             if(isEnnemi.nextBoolean() == true){
-                tetesEnnemies[i] = faces[i];
-
+                tetesEnnemies.add(j, faces[i]);
+                j++;
                 //java.lang.NullPointerException: Attempt to write to null array
 
             }
         }
 
-        if(tetesEnnemies.length == 0)
+        if(tetesEnnemies.isEmpty())
         {
-            textDetect.setText(null);
+          //  textDetect.setText(null);
             dessinTete.setHaveFace(false);
         }
         else
         {
-            textDetect.setText(R.string.visage_detect);
+           // textDetect.setText(R.string.visage_detect);
             dessinTete.setFaces(tetesEnnemies);
             dessinTete.setHaveFace(true);
         }
         dessinTete.invalidate();
         //Log.i("dtct","Visage detécté !");
-    }*/
+    }
 
 
-    /* Version de base, pas d'aléatoire */
+    /* Version de base, pas d'aléatoire
     public void onFaceDetection(Camera.Face[] faces, Camera camera) {
         int i=0;
 
@@ -280,10 +282,11 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
             textDetect.setText(R.string.visage_detect);
             dessinTete.setFaces(faces);
             dessinTete.setHaveFace(true);
+            Log.i("cc","Visage detecté");
         }
         dessinTete.invalidate();
         //Log.i("dtct","Visage detécté !");
-    }
+    }*/
 
 }
 
