@@ -241,17 +241,26 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
 
     @Override
 //Aléatoire fonctionnel, prochaine étape c'est d'arrêter le refresh constant
-    public void onFaceDetection(Camera.Face[] faces, Camera camera) {
+    /*public void onFaceDetection(Camera.Face[] faces, Camera camera) {
         tetesEnnemies = new Vector();
-        int j = 0;
-        for(int i=0;i<faces.length;i++){
-            if(isEnnemi.nextBoolean() == true){
-                tetesEnnemies.add(j, faces[i]);
-                j++;
-                //java.lang.NullPointerException: Attempt to write to null array
-
+        Vector<Integer> ids = new Vector<Integer>();
+        if (tetesEnnemies.isEmpty()) {
+            for (int i = 0; i < faces.length; i++) {
+                if (isEnnemi.nextBoolean()) {
+                    tetesEnnemies.add(i, faces[i]);
+                }
             }
         }
+        else
+        {
+            Camera.Face teteTest = (Camera.Face) tetesEnnemies.firstElement();
+            for(int i=0;i<faces.length;i++){
+                if(teteTest.id == faces[i].id){
+
+                }
+            }
+        }
+
 
         if(tetesEnnemies.isEmpty())
         {
@@ -266,27 +275,30 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
         }
         dessinTete.invalidate();
         //Log.i("dtct","Visage detécté !");
-    }
+    }*/
 
 
-    /* Version de base, pas d'aléatoire
+    /* Version de base, pas d'aléatoire */
     public void onFaceDetection(Camera.Face[] faces, Camera camera) {
-        int i=0;
-
-        if(faces.length == 0){
+        tetesEnnemies = new Vector();
+        Vector<Integer> ids = new Vector<Integer>();
+        for(int i=0;i<faces.length;i++){
+            tetesEnnemies.add(faces[i]);
+        }
+        if(tetesEnnemies.isEmpty()){
             textDetect.setText(null);
             dessinTete.setHaveFace(false);
         }
         else
         {
             textDetect.setText(R.string.visage_detect);
-            dessinTete.setFaces(faces);
+            dessinTete.setFaces(tetesEnnemies);
             dessinTete.setHaveFace(true);
             Log.i("cc","Visage detecté");
         }
         dessinTete.invalidate();
         //Log.i("dtct","Visage detécté !");
-    }*/
+    }
 
 }
 
