@@ -1,4 +1,4 @@
-package matrux.game.jeu; /**
+﻿package matrux.game.jeu; /**
  * Created by Nico on 18/01/2016.
  */
 
@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
 
 import java.util.Random;
 import java.util.Vector;
@@ -41,12 +42,12 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
     private Random isEnnemi;
     private Vector tetesEnnemies;
 
-    /*
+     /*
     BOUSSOLE
      */
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private Sensor mMagneticField;
+    private Radar radar;
+    private static SensorManager sensorService;
+    private Sensor sensor;
 
     private float[] r;
     private float[] g;
@@ -60,12 +61,24 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
         //setContentView(new Ennemi(this,1,1));
+
         /*
         BOUSSOLE :
          */
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mMagneticField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        radar = (Radar) findViewById(R.id.radar);
+        radar.setWillNotDraw(false);
+        sensorService = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorService.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+        if (sensor != null) {
+            sensorService.registerListener(this, sensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+            Log.i("Compass MainActivity", "Registerered for ORIENTATION Sensor");
+        } else {
+            Log.e("Compass MainActivity", "Registerered for ORIENTATION Sensor");
+            Toast.makeText(this, "ORIENTATION Sensor not found",
+                    Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         /*
         FACEDETECTOR
@@ -220,17 +233,11 @@ public class WorldActivity extends Activity implements SensorEventListener, Came
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float[] accValue;
-        float[] magnValue;
-        SensorManager.getRotationMatrix(r, g, event.values, event.values);
-        if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
-            accValue = event.values;
-        }
-        if(event.sensor.getType()==Sensor.TYPE_MAGNETIC_FIELD){
-            magnValue = event.values;
-        }
-        SensorManager.getRotationMatrix(r, g, event.values, event.values);
-        SensorManager.getOrientation(r, resultat);
+        float azimuth = event.values[0];
+        //textSensor.setText(""+azimuth);
+        //runOn
+        radar.updateData(azimuth);
+        radar.invalidate();
 
     }
 

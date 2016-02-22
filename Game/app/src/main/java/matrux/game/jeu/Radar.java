@@ -9,32 +9,71 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import matrux.game.R;
 
-/**
- * TODO: document your custom view class.
- */
+
 public class Radar extends View {
 
     private Paint paint;
     private float orientation;
     private Point[] locationEnnemies;
-    private int tailleEcran;
 
     public Radar(Context context) {
         super(context);
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(2);
+        paint.setTextSize(25);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.WHITE);
+    }
+    public Radar(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(2);
+        paint.setTextSize(25);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.WHITE);
     }
 
+    public Radar(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(2);
+        paint.setTextSize(25);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.WHITE);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        for(int i=0;i<locationEnnemies.length;i++){
-            if(locationEnnemies[i].x < tailleEcran*orientation*10)
-            canvas.drawCircle(locationEnnemies[i].x/orientation,locationEnnemies[i].y,1,paint);
-        }
+        super.onDraw(canvas);
+        int xPoint = this.getMeasuredWidth() / 2;
+        int yPoint = this.getMeasuredHeight() / 2;
+
+        float rayon = (float) yPoint;
+        canvas.drawCircle(xPoint, yPoint, rayon, paint);
+
+        canvas.drawLine(xPoint,
+                yPoint,
+                (float) (xPoint + rayon
+                        * Math.sin((double) (-orientation) / 180 * 3.143)),
+                (float) (yPoint - rayon
+                        * Math.cos((double) (-orientation) / 180 * 3.143)), paint);
+
+        canvas.drawText(String.valueOf(orientation), xPoint, yPoint, paint);
     }
 
+    public void updateData(float position) {
+        this.orientation = position;
+        Log.i("position :",""+orientation);
+
+        this.invalidate();
+    }
 
 }

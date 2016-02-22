@@ -17,5 +17,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
+    <matrux.game.jeu.Radar
+        android:id="@+id/radar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>
 
