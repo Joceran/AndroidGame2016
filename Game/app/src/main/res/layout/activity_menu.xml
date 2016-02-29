@@ -13,36 +13,41 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="121dp"
-        android:layout_height="190dp"
-        android:layout_gravity="center">
+        android:layout_height="201dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
 
         <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
             android:text="@string/button_jouer"
             android:id="@+id/button_jouer"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/blue_pill"/>
 
         <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_options"
-            android:id="@+id/button_options"
-            android:layout_gravity="center_horizontal" />
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="@string/button_apropos"
+            android:id="@+id/button_apropos"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/blue_pill"/>
 
         <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_credits"
-            android:id="@+id/button_credits"
-            android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
             android:text="@string/button_quitter"
             android:id="@+id/button_quitter"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/red_pill"/>
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal|top"
+        android:src="@drawable/matrux"/>
 
 </FrameLayout>

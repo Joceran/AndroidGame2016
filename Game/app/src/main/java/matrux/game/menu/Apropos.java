@@ -1,7 +1,6 @@
 package matrux.game.menu;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,15 +10,12 @@ import android.widget.TextView;
 
 import matrux.game.R;
 
-public class Options extends AppCompatActivity {
+public class Apropos extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_options);
-
-        TextView txtview = (TextView) findViewById(R.id.Son);
-        txtview.setTextColor(Color.RED);
+        setContentView(R.layout.activity_propos);
 
         Button btn_retour = (Button) findViewById(R.id.button_retour);
 

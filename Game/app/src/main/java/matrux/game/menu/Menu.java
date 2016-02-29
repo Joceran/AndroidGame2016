@@ -14,8 +14,11 @@ public class Menu extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_menu);
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
 
         Button jouer = (Button) findViewById(R.id.button_jouer);
         jouer.setOnClickListener(new View.OnClickListener() {
@@ -25,11 +28,11 @@ public class Menu extends Activity {
          });
 
 
-        Button options = (Button) findViewById(R.id.button_options);
-        options.setOnClickListener(new View.OnClickListener() {
+        Button apropos = (Button) findViewById(R.id.button_apropos);
+        apropos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Menu.this, Options.class));
+                startActivity(new Intent(Menu.this, Apropos.class));
             }
         });
 

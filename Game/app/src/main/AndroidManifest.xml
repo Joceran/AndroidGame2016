@@ -27,7 +27,7 @@
             >
 
         </activity>
-        <activity android:name=".menu.Options"
+        <activity android:name=".menu.Apropos"
             android:screenOrientation="landscape"
             >
         </activity>
