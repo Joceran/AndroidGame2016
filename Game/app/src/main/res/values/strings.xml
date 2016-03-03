@@ -2,9 +2,15 @@
     <string name="app_name">Game</string>
     
     <string name="button_jouer">Jouer</string>
-    <string name="button_options">Options</string>
-    <string name="button_credits">Crédits</string>
+    <string name="button_apropos">A Propos</string>
     <string name="button_quitter">Quitter</string>
     <string name="title_activity_world_controller">WorldController</string>
     <string name="visage_detect">Visage(s) detecté(s) :)</string>
+    <string name="text_propos">Le monde tel qu’on le connaît n’existe plus. Les machines ont
+        pris le pouvoir et ont enfermé les humains dans un programme informatique connu
+        sous le nom de Matrux. Les seuls survivants se sont retranchés dans la dernière
+        cité encore debout: Lannion.
+        Néon, jeune étudiant a l’IUT informatique de Lannion est l’élu malgré lui. Avec l’aide de
+        Morphal, il doit vaincre l’agent Forgeron afin de protéger Lannion.
+    </string>
 </resources>
