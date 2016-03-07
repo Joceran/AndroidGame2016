@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.Random;
 import java.util.Vector;
 
+import matrux.game.R;
 import matrux.game.util.Dessin_Tete;
 
 /**
@@ -33,6 +34,7 @@ public class CameraSurfacePreview extends SurfaceView implements SurfaceHolder.C
     private Random isEnnemi;
     private Vector tetesEnnemies;
     private Dessin_Tete dessinTete;
+    private EnnemiView ev;
     private float[] r;
     private float[] g;
     private float[] resultat;
@@ -179,7 +181,6 @@ public class CameraSurfacePreview extends SurfaceView implements SurfaceHolder.C
     public void onFaceDetection(Camera.Face[] faces, Camera camera) {
         tetesEnnemies = new Vector();
 
-
         int j = 0;
         for(int i=0;i<faces.length;i++){
             if(isEnnemi.nextBoolean() == true){
@@ -192,18 +193,20 @@ public class CameraSurfacePreview extends SurfaceView implements SurfaceHolder.C
 
         if(tetesEnnemies.isEmpty())
         {
-            //  textDetect.setText(null);
+            //textDetect.setText(null);
             dessinTete.setHaveFace(false);
         }
         else
         {
-            // textDetect.setText(R.string.visage_detect);
+            //textDetect.setText(R.string.visage_detect);
             dessinTete.setFaces(tetesEnnemies);
             dessinTete.setHaveFace(true);
 
 
         }
         dessinTete.invalidate();
+        //ev.demarrer();
         //Log.i("dtct","Visage detécté !");
+
     }
 }

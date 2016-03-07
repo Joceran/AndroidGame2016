@@ -3,12 +3,17 @@ package matrux.game.jeu;
 /**
  * Created by Nico on 05/02/2016.
  */
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import matrux.game.R;
 
 public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -16,10 +21,27 @@ public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
     private GameLoopThread gameLoopThread;
     private Ennemi ennemi;
 
-    // création de la surface de dessin
+    public EnnemiView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public EnnemiView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init(context);
+    }
+
     public EnnemiView(Context context) {
         super(context);
+        init(context);
+
+    }
+
+    public void init(Context context) {
         getHolder().addCallback(this);
+        getHolder().setFormat(PixelFormat.TRANSPARENT);
+        this.setBackgroundColor(Color.TRANSPARENT);
+        this.setZOrderOnTop(true);
         gameLoopThread = new GameLoopThread(this);
 
         // création d'un objet "balle", dont on définira la largeur/hauteur
@@ -32,9 +54,8 @@ public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
         if (canvas == null) {
             return;
         }
-
         // on efface l'écran, en blanc
-        canvas.drawColor(Color.WHITE);
+        //canvas.drawColor(Color.TRANSPARENT);
 
         // on dessine la balle
         ennemi.draw(canvas);
@@ -122,4 +143,17 @@ public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h) {
         ennemi.resize(w,h); // on définit la taille de la balle selon la taille de l'écran
     }
+
+    public void updateView(Activity act) {
+        final EnnemiView ev = this;
+        act.runOnUiThread(new Runnable() {
+            public void run() {
+                ev.invalidate();
+            }
+        });
+    }
+
+    /*public void demarrer() {
+        gameLoopThread.setRunning(true);
+    }*/
 }

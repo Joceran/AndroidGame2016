@@ -41,6 +41,8 @@ public class WorldActivity extends Activity implements SensorEventListener {
     private int hauteur_tel;
     DisplayMetrics metrics;
 
+    private EnnemiView ev;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
@@ -68,12 +70,13 @@ public class WorldActivity extends Activity implements SensorEventListener {
     /*ENNEMI */
 
 
-
-        csp=(CameraSurfacePreview)findViewById(R.id.ennemi_view);
+        ev = (EnnemiView) findViewById(R.id.ennemi_view);
+        csp=(CameraSurfacePreview)findViewById(R.id.camera_view);
         ViewGroup.LayoutParams layoutParamsDrawing
                 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.FILL_PARENT);
         this.addContentView(csp.getDessinTete(), layoutParamsDrawing);
+        ev.updateView(this);
 
     }
 
@@ -103,6 +106,8 @@ public class WorldActivity extends Activity implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+
 
 
     /* Version de base, pas d'aléatoire
