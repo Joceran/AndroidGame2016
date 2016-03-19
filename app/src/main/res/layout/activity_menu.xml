@@ -1,0 +1,53 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@drawable/matrix" tools:context=".Menu">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="121dp"
+        android:layout_height="201dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="@string/button_jouer"
+            android:id="@+id/button_jouer"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/blue_pill"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="@string/button_apropos"
+            android:id="@+id/button_apropos"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/blue_pill"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="@string/button_quitter"
+            android:id="@+id/button_quitter"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/red_pill"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal|top"
+        android:src="@drawable/matrux"/>
+
+</FrameLayout>
