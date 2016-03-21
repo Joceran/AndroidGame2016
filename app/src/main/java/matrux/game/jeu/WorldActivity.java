@@ -9,13 +9,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import matrux.game.R;
-
+import matrux.game.menu.Menu;
 
 public class WorldActivity extends Activity implements SensorEventListener {
 
@@ -41,11 +42,14 @@ public class WorldActivity extends Activity implements SensorEventListener {
     private EnnemiView ev;
     private Ennemi e;
 
+    MediaPlayer media1;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
-
+        media1= MediaPlayer.create(WorldActivity.this, R.raw.zicmu);
+        media1.start();
         /*
         BOUSSOLE :
          */
@@ -105,7 +109,11 @@ public class WorldActivity extends Activity implements SensorEventListener {
     }
 
 
-
+    public void onBackPressed(){
+        media1.stop();
+        Menu.media.start();
+        finish();
+    }
 
     /* Version de base, pas d'aléatoire
     public void onFaceDetection(Camera.Face[] faces, Camera camera) {

@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
+import android.media.MediaPlayer;
 import matrux.game.R;
 import matrux.game.jeu.WorldActivity;
 
 
 public class Menu extends Activity {
-
+    public static MediaPlayer media;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
@@ -19,11 +19,13 @@ public class Menu extends Activity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-
+        media= MediaPlayer.create(Menu.this, R.raw.zicmenu);
+        media.start();
         Button jouer = (Button) findViewById(R.id.button_jouer);
         jouer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
                 startActivity(new Intent(Menu.this, WorldActivity.class));
+                media.stop();
             }
          });
 
