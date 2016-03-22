@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import matrux.game.R;
@@ -42,14 +44,34 @@ public class WorldActivity extends Activity implements SensorEventListener {
     private EnnemiView ev;
     private Ennemi e;
 
-    MediaPlayer media1;
+    /*SON*/
+    private MediaPlayer media1;
+
+    /*JOUEUR*/
+    private Joueur joueur;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
+        /*
+        SON
+         */
         media1= MediaPlayer.create(WorldActivity.this, R.raw.zicmu);
         media1.start();
+        Button music = (Button) findViewById(R.id.button_music);
+        music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (media1.isPlaying()) {
+                    media1.pause();
+                    findViewById(R.id.button_music).setBackgroundResource(android.R.drawable.ic_media_pause);
+                } else {
+                    media1.start();
+                    findViewById(R.id.button_music).setBackgroundResource(android.R.drawable.ic_media_play);
+                }
+            }
+        });
         /*
         BOUSSOLE :
          */
@@ -72,11 +94,22 @@ public class WorldActivity extends Activity implements SensorEventListener {
     /*ENNEMI */
 
         csp=(CameraSurfacePreview)findViewById(R.id.camera_view);
+    /*    csp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                joueur.incrementeScore();
+            }
+        });*/
+
         ev=(EnnemiView)findViewById(R.id.ennemi_view);
         ViewGroup.LayoutParams layoutParamsDrawing
                 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.FILL_PARENT);
         this.addContentView(csp.getDessinTete(), layoutParamsDrawing);
+
+        /*Joueur (difficulté par défault pour le moment)
+        joueur = (Joueur) findViewById(R.id.joueur);
+        joueur.setWillNotDraw(false);*/
 
 
     }

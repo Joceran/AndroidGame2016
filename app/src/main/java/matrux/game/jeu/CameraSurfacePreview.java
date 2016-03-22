@@ -25,7 +25,8 @@ public class CameraSurfacePreview extends SurfaceView implements SurfaceHolder.C
 
     private Random isEnnemi;
     private Vector tetesEnnemies;
-    private Dessin_Tete dessinTete;
+    private static Dessin_Tete dessinTete;
+    public static boolean tete;
     private EnnemiView ev;
     private float[] r;
     private float[] g;
@@ -76,8 +77,16 @@ public class CameraSurfacePreview extends SurfaceView implements SurfaceHolder.C
 
     }
 
-    public Dessin_Tete getDessinTete() {
+    public static Dessin_Tete getDessinTete() {
         return dessinTete;
+    }
+
+    public boolean getTete() {
+        return tete;
+    }
+
+    public void setTete(boolean b) {
+        tete = b;
     }
 
     @Override
@@ -100,7 +109,7 @@ public class CameraSurfacePreview extends SurfaceView implements SurfaceHolder.C
     public void onResumeC() {
         camera = Camera.open();
         camera.setFaceDetectionListener(this);
-        //camera.startFaceDetection();
+        camera.startFaceDetection();
         startPreview();
     }
     public void onPauseC() {

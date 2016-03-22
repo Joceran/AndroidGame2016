@@ -17,34 +17,31 @@ import matrux.game.R;
  * Created by Nico on 18/01/2016.
  */
 
-class Ennemi extends ImageView implements SurfaceHolder.Callback
-{
-    private int nbptsvie;
-    private int pts;
-    private int ID;
-    private BitmapDrawable img=null; // image de l'ennemi
-    private int x,y; // coordonnées x,y de l'ennemi en pixel
+class Ennemi extends ImageView implements SurfaceHolder.Callback {
+    private int nbptsvie; //Nombre de points de vie de l'ennemi
+    private int pts; //Nombre de points que rapporte l'ennemi au joueur
+    private int ID; //Identifiant de l'ennemi
+    private BitmapDrawable img = null; // image de l'ennemi
+    private int x, y; // coordonnées x,y de l'ennemi en pixel
     private int ennemiW, ennemiH; // largeur et hauteur de l'ennemien pixels
-    private int wEcran,hEcran; // largeur et hauteur de l'écran en pixels
+    private int wEcran, hEcran; // largeur et hauteur de l'écran en pixels
     private boolean move = true; // 'true' si l'ennemi doit se déplacer automatiquement, 'false' sinon
 
     // pour déplacer l'ennemi on ajoutera INCREMENT à ses coordonnées x et y
     private static final int INCREMENT = 5;
-    private int speedX=INCREMENT, speedY=INCREMENT;
+    private int speedX = INCREMENT, speedY = INCREMENT;
 
     // contexte de l'application Android
-    // il servira à accéder aux ressources, dont l'image de la balle
+    // il servira à accéder aux ressources, dont l'image de l'ennemi
     private final Context mContext;
 
     // Constructeur de l'objet "Ennemi"
-    public Ennemi(final Context c, int id)
-    {
+    public Ennemi(final Context c, int id) {
         super(c);
-        Random r=new Random();
-        x= r.nextInt(700-0)+0;
-        y= r.nextInt(700-0)+0;
-        //x=0; y=0; // position de départ à adapter avec la tête
-        mContext=c; // sauvegarde du contexte
+        Random r = new Random();
+        x = r.nextInt(700 - 0) + 0; //X et Y : Coordonnées qui gèrent l'emplacement de l'ennemi
+        y = r.nextInt(700 - 0) + 0; // Emplacement de base aléatoire
+        mContext = c; // sauvegarde du contexte
         this.ID = id;
         this.nbptsvie = 2;
     }
@@ -61,6 +58,7 @@ class Ennemi extends ImageView implements SurfaceHolder.Callback
         return this.ID;
     }
 
+    //Fonction qui permet de détruire l'ennemi
     public void destroy() {
         img.getBitmap().recycle();
         img = null;
@@ -74,31 +72,23 @@ class Ennemi extends ImageView implements SurfaceHolder.Callback
         return new BitmapDrawable(c.getResources(), Bitmap.createScaledBitmap(bitmap, w, h, true));
     }
 
-    // retourne 'true' si l'ennemi se déplace automatiquement
-    // 'false' sinon
-    // car on la bloque sous le doigt du joueur lorsqu'il la déplace
-    public boolean isMoving() {
-        return move;
-    }
-
-    // définit si oui ou non la balle doit se déplacer automatiquement
-    // car on la bloque sous le doigt du joueur lorsqu'il la déplace
+    //Fonction qui définit si oui ou non l'ennemi doit se déplacer
     public void setMove(boolean move) {
         this.move = move;
     }
 
-    // redimensionnement de l'image selon la largeur/hauteur de l'écran passés en paramètre
+    //Redimensionnement de l'image selon la largeur/hauteur de l'écran passés en paramètre
     public void resize(int wScreen, int hScreen) {
         // wScreen et hScreen sont la largeur et la hauteur de l'écran en pixel
         // on sauve ces informations en variable globale, car elles serviront
         // à détecter les collisions sur les bords de l'écran
-        wEcran=wScreen;
-        hEcran=hScreen;
+        wEcran = wScreen;
+        hEcran = hScreen;
 
         // on définit (au choix) la taille de l'ennemi à 1/5ème de la largeur de l'écran
-        ennemiW=wScreen/5;
-        ennemiH=wScreen/5;
-        img = setImage(mContext,R.mipmap.robot,ennemiW,ennemiH);
+        ennemiW = wScreen / 5;
+        ennemiH = wScreen / 5;
+        img = setImage(mContext, R.mipmap.robot, ennemiW, ennemiH);
     }
 
     // définit la coordonnée X de l'ennemi
@@ -111,59 +101,68 @@ class Ennemi extends ImageView implements SurfaceHolder.Callback
         this.y = y;
     }
 
-    // retourne la coordonnée X de la balle
+    // retourne la coordonnée X de l'ennemi
     public float getX() {
         return x;
     }
 
-    // retourne la coordonnée Y de la balle
+    // retourne la coordonnée Y de l'ennemi
     public float getY() {
         return y;
     }
 
-    // retourne la largeur de la balle en pixel
+    // retourne la largeur de l'ennemi en pixel
     public int getEnnemiW() {
         return ennemiW;
     }
 
-    // retourne la hauteur de la balle en pixel
+    // retourne la hauteur de l'ennemi en pixel
     public int getEnnemiH() {
         return ennemiH;
     }
 
-    // déplace la balle en détectant les collisions avec les bords de l'écran
-    public void moveWithCollisionDetection()
-    {
-        // si on ne doit pas déplacer la balle (lorsqu'elle est sous le doigt du joueur)
-        // on quitte
-        if(!move) {return;}
+    // déplace l'enemi en détectant les collisions avec les bords de l'écran
+    public void moveWithCollisionDetection() {
+        if (!move) {
+            return;
+        }
 
         // on incrémente les coordonnées X et Y
-        x+=speedX;
-        y+=speedY;
+        x += speedX;
+        y += speedY;
 
         // si x dépasse la largeur de l'écran, on inverse le déplacement
-        if(x+ennemiW > wEcran) {speedX=-INCREMENT;}
+        if (x + ennemiW > wEcran) {
+            speedX = -INCREMENT;
+        }
 
         // si y dépasse la hauteur l'écran, on inverse le déplacement
-        if(y+ennemiH > hEcran) {speedY=-INCREMENT;}
+        if (y + ennemiH > hEcran) {
+            speedY = -INCREMENT;
+        }
 
         // si x passe à gauche de l'écran, on inverse le déplacement
-        if(x<0) {speedX=INCREMENT;}
+        if (x < 0) {
+            speedX = INCREMENT;
+        }
 
         // si y passe à dessus de l'écran, on inverse le déplacement
-        if(y<0) {speedY=INCREMENT;}
+        if (y < 0) {
+            speedY = INCREMENT;
+        }
     }
 
-    // on dessine l'ennemi, en x et y
+    // on dessine l'ennemi, aux coordonnées X et Y
     public void ddraw(Canvas canvas) {
-        if(img==null) {return;}
+        if (img == null) {
+            return;
+        }
         canvas.drawBitmap(img.getBitmap(), x, y, null);
     }
-
+    //Fonction obligatoires du Listener
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.e("Ennemi","Surface crée");
+        Log.e("Ennemi", "Surface crée");
     }
 
     @Override
@@ -175,4 +174,8 @@ class Ennemi extends ImageView implements SurfaceHolder.Callback
     public void surfaceDestroyed(SurfaceHolder holder) {
 
     }
-} // public class Ennemi
+
+    public BitmapDrawable getImg() {
+        return img;
+    }
+}

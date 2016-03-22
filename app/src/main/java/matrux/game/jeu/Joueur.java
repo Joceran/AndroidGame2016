@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -17,8 +18,9 @@ import android.view.View;
  */
 public class Joueur extends View {
 
-    private int score,vie;
-    private Paint pnt;
+    private int score; //Score du joueur, de base le score est de 0
+    private int vie; //Nombre de points de vie du joueur
+    private Paint pnt; //Permet l'affichage du score et de la vie du joueur
 
 
     //Constructeur personnalisé (si le paramètre de difficulté est changé)
@@ -58,12 +60,17 @@ public class Joueur extends View {
         return vie;
     }
 
+    //Incrémente le score du joueur lors de la mort d'un ennemi/boss
     public void incrementeScore(){
         score++;
+        Log.i("SCORE", "Incrementation");
+        this.invalidate();
     }
-
+    //Décrémente la vie du joueur lorsqu'il ne vainc pas un ennemi
     public void decrementeVie(){
         vie--;
+        Log.i("VIE", "Decrementation");
+        this.invalidate();
     }
 
     @Override
@@ -71,6 +78,7 @@ public class Joueur extends View {
         return "Vie : "+getVie()+" | Score : "+getScore();
     }
 
+    //Dessine sur la vue les paramètres de vie et de score du joueur
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         canvas.drawText(this.toString(),0,50, pnt);

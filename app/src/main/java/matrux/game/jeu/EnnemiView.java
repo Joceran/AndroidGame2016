@@ -5,10 +5,16 @@ package matrux.game.jeu;
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.hardware.Camera;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -17,15 +23,26 @@ import android.view.SurfaceView;
 
 import java.util.Random;
 
+import matrux.game.R;
+import matrux.game.util.Dessin_Tete;
+
 public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
 
-    // déclaration de l'objet définissant la boucle principale de déplacement et de rendu
+    /* déclaration de l'objet définissant la boucle principale de déplacement et de rendu, cette
+    cette surface permet également l'interaction avec les ennemis, donc leur apparition et
+    élimination
+    */
     private GameLoopThread gameLoopThread;
     private Ennemi ennemi;
     private Ennemi ennemi2;
     private Ennemi ennemi3;
     private Ennemi ennemi4;
     private Ennemi[] tab_ennemi;
+    private CameraSurfacePreview csp;
+    private Boss b;
+    private Random r;
+    private Joueur j;
+    private static long end;
 
 
     public EnnemiView(Context context, AttributeSet attrs) {
@@ -51,69 +68,63 @@ public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
         this.setZOrderOnTop(true);
         gameLoopThread = new GameLoopThread(this);
         this.tab_ennemi = new Ennemi[4];
-        Random r=new Random();
+        this.r=new Random();
+        this.j = (Joueur) findViewById(R.id.joueur);
 
 
-        // création d'un objet "balle", dont on définira la largeur/hauteur
-        // selon la largeur ou la hauteur de l'écran
+        // création d'un tableau d'ennemis, chaque ennemi à un ID propre
+        // Les boss ont leur propre ID
         ennemi = new Ennemi(this.getContext(),1);
         ennemi2 = new Ennemi(this.getContext(),2);
         ennemi3 = new Ennemi(this.getContext(),3);
         ennemi4 = new Ennemi(this.getContext(),4);
+        b = new Boss(this.getContext(),1);
         tab_ennemi[0]=ennemi;
         tab_ennemi[1]=ennemi2;
         tab_ennemi[2]=ennemi3;
         tab_ennemi[3]=ennemi4;
-    }
-/*
-    public void addEnnemi(Ennemi e) {
-        tab_ennemi.add(e);
-    }
 
-    public void delEnnemi(int ID) {
-        for(int i=0;i<tab_ennmi.length;i++) {
-            if(tab_ennemi[i].getID()==ID) {
-
-            }
-        }
+        end = System.currentTimeMillis()+3000;
     }
-
-    public Ennemi getEnnemi(int ID) {
-        Iterator<Ennemi> it = tab_ennemi.iterator();
-        while(it.hasNext()) {
-            if(ID == it.next().getID()) {
-                return it.next();
-            }
-        }
-        return null;
-    } */
 
     // Fonction qui "dessine" un écran de jeu
     public void doDraw(Canvas canvas) {
         if (canvas == null) {
             return;
         }
-        // on efface l'écran, en blanc
+        // on efface l'écran, tout en gérant la transparence
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
 
-        // on dessine la balle
+        // on dessine les ennemis
         for(int i=0;i<tab_ennemi.length;i++) {
-
-           tab_ennemi[i].ddraw(canvas);
-
-            Log.e("test", "ennemi " + i + " créé");
+            if(tab_ennemi[i].getImg() != null) {
+                tab_ennemi[i].ddraw(canvas);
+                Log.i("test", "ennemi " + i + " créé");
+            }
         }
+
+        b.ddraw(canvas); //Dessin du boss (test)
     }
 
     // Fonction appelée par la boucle principale (gameLoopThread)
     // On gère ici le déplacement des objets
     public void update() {
-
+        //Log.e("System",""+System.currentTimeMillis()+"///"+end);
         for(int i=0;i<tab_ennemi.length;i++) {
-
             tab_ennemi[i].moveWithCollisionDetection();
-
-
+        }
+        if(System.currentTimeMillis() < end) {
+            b.moveWithCollisionDetectionBoost();
+            b.setCD(500);
+        }
+        else {
+            b.moveWithCollisionDetectionNormal();
+            b.setCD(b.getCD() - 1);
+            Log.e("Boss",""+b.getCD());
+            if(b.getCD() == 0) {
+                end = System.currentTimeMillis()+3000;
+                Log.e("Boss", "Boost dispo");
+            }
         }
     }
 
@@ -122,7 +133,7 @@ public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         // création du processus GameLoopThread si cela n'est pas fait
-        this.demarrer();
+        //this.demarrer();
     }
 
     // Fonction obligatoire de l'objet SurfaceView
@@ -144,7 +155,7 @@ public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    // Gère les touchés sur l'écran
+    // Gère l'interaction entre les ennemis et le joueur, donc l'élimination de ceux-ci
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int currentX = (int) event.getX();
@@ -156,24 +167,45 @@ public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_DOWN:
                 // si le doigt touche la balle :
                 //ennemi = getEnnemi();
-                if (currentX >= ennemi.getX() &&
-                        currentX <= ennemi.getX() + ennemi.getEnnemiW() &&
-                        currentY >= ennemi.getY() && currentY <= ennemi.getY() + ennemi.getEnnemiH()) {
-                    // on arrête de déplacer la balle
-                    ennemi.setMove(false);
-                    ennemi.setNbptsvie(ennemi.getNbptsvie()- 1);
-                    if(ennemi.getNbptsvie() == 0) {
-                        ennemi.destroy();
-                        //delEnnemi(ennemi.getID());
+                for (int i = 0; i < tab_ennemi.length; i++) {
+                    if (currentX >= tab_ennemi[i].getX() &&
+                            currentX <= tab_ennemi[i].getX() + tab_ennemi[i].getEnnemiW() &&
+                            currentY >= tab_ennemi[i].getY() && currentY <= tab_ennemi[i].getY() + tab_ennemi[i].getEnnemiH()) {
+                        // on arrête de déplacer la balle
+                        tab_ennemi[i].setMove(false);
+                        tab_ennemi[i].setNbptsvie(tab_ennemi[i].getNbptsvie() - 1);
+                        if (tab_ennemi[i].getNbptsvie() == 0) {
+                            tab_ennemi[i].destroy();
+                            //delEnnemi(ennemi.getID());
+                        } else {
+                            tab_ennemi[i].setMove(true);
+                        }
                     }
-                    else {
-                        ennemi.setMove(true);
+                }
+                if (csp.getDessinTete().getBitmap() != null) {
+                    if (currentX >= csp.getDessinTete().getX() &&
+                            currentX <= csp.getDessinTete().getX() + csp.getDessinTete().getWidth() &&
+                            currentY >= csp.getDessinTete().getY() && currentY <= csp.getDessinTete().getY() + csp.getDessinTete().getHeight()) {
+                        Log.e("test", "le doigt touche sa sale face");
+
+                        //csp.setTete(false);
+                        //csp.getDessinTete().destroy();
+                        this.demarrer();
+                    }
+                }
+                if (currentX >= b.getX() + b.getEnnemiW() &&
+                        currentY <= b.getY() + b.getEnnemiH()) {
+                    b.setMove(false);
+                    b.setNbptsvie(b.getNbptsvie() - 1);
+                    if (b.getNbptsvie() == 0) {
+                        b.destroy();
+                    } else {
+                        b.setMove(true);
                     }
                 }
                 break;
         }
-
-        return true;  // On retourne "true" pour indiquer qu'on a géré l'évènement
+        return true; // On retourne "true" pour indiquer qu'on a géré l'évènement
     }
 
     // Fonction obligatoire de l'objet SurfaceView
@@ -182,11 +214,9 @@ public class EnnemiView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int w, int h) {
         for(int j=0;j<tab_ennemi.length;j++) {
-
-            tab_ennemi[j].resize(w,h); // on définit la taille de la balle selon la taille de l'écran
-
-
+            tab_ennemi[j].resize(w,h); // on définit la taille des ennemis selon la taille de l'écran
         }
+        b.resize(w,h);
 
     }
 
